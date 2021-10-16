@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        NER演示系统
+    </title>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <div align="center">
+    <h1>NER演示系统</h1>
+    <input type="text" id="text">
+    <button id="ner" type="button">NER</button>
+    </div>
+    <div id="result"></div>
+    <script>
+        $(document).ready(function(){
+            $("#ner").click(function(){
+                let text = $("#text").val();
+                let url = "ner?text="+text
+                console.log(url);
+                htmlobj=$.ajax({url:url,async:false}).responseText;
+                console.log(htmlobj);
+                let obj = JSON.parse(htmlobj);
+                let cixing = obj[0][0];
+                let ner = obj[1][0];
+                console.log(cixing)
+                let html_cixing = "<div align=\"center\" style=\"color:black\"><div style=\"color:red\"> 词性标注</div><br>";
+                for(let i in cixing){
+                    console.log(i)
+                    let word=cixing[i][0];
+                    let cx = cixing[i][1];
+                    html_cixing = html_cixing +"&nbsp;&nbsp;"+word+": "+cx;
+                }
+                let html_ner = "<div align=\"center\"><div style=\"color:red\" >命名实体识别</div><br>";
+                for(let i in ner){
+                    let word = ner[i][3];
+                    let cx = ner[i][2];
+                    html_ner = html_ner + "&nbsp;&nbsp;"+word+": "+cx;
+                }
+                console.log(html_cixing);
+                let result = "<br>"+html_cixing+"</div><br><br>"+html_ner+"</div>";
+                document.getElementById("result").innerHTML=result;
+                // $("#result").html(htmlobj.responseText);
+            });
+        });
+
+    </script>
+</body>
+</html>
